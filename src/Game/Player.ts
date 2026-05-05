@@ -16,9 +16,14 @@ export class Player extends Object3D {
     private isGrounded: boolean = false
     private gravity: number = -25
     private jumpForce: number = 10
+    private eyeHeight: number = 1.7 // Altura de los ojos
 
-    private camWorldDir = new Vector3()
     private inputVector = new Vector3()
+    
+    // Vectores auxiliares para cálculos (evitan crear nuevos objetos cada frame/clic)
+    private _v1 = new Vector3()
+    private _v2 = new Vector3()
+    private _v3 = new Vector3()
 
     private bobTimer: number = 0
     private recoilSpeed: number = 10
@@ -55,7 +60,7 @@ export class Player extends Object3D {
         this.playerBody.visible = false
         this.add(this.playerBody)
 
-        this.camera.position.set(0, 1.7, 0)
+        this.camera.position.set(0, this.eyeHeight, 0)
         sceneManager.add(this)
 
         window.addEventListener('mousedown', (e) => {
@@ -69,11 +74,11 @@ export class Player extends Object3D {
         if (!projectileManager) return;
 
         // 1. Posición de la punta del arma (Muzzle)
-        const barrelPosition = new Vector3();
+        const barrelPosition = this._v1;
         this.muzzlePoint.getWorldPosition(barrelPosition);
 
         // 2. ¿A qué estamos apuntando en el centro de la pantalla?
-        const targetPoint = new Vector3();
+        const targetPoint = this._v2;
 
         // Configuramos el rayo desde el centro de la cámara (0,0 es el centro en NDC)
         this.shootRaycaster.setFromCamera(this.centerScreen, this.camera);
@@ -91,7 +96,7 @@ export class Player extends Object3D {
         }
 
         // 3. Calculamos la dirección real: desde el cañón hacia el punto de impacto
-        const finalDirection = new Vector3()
+        const finalDirection = this._v3
             .subVectors(targetPoint, barrelPosition)
             .normalize();
 
@@ -136,12 +141,12 @@ export class Player extends Object3D {
             const bobX = Math.cos(this.bobTimer * 0.5) * (isSprinting ? 0.05 : 0.02)
             const bobY = Math.sin(this.bobTimer) * (isSprinting ? 0.08 : 0.04)
 
-            this.camera.position.y = 1.7 + bobY
+            this.camera.position.y = this.eyeHeight + bobY
             this.weapon.position.x = 0.3 + bobX
             this.weapon.position.y = -0.3 + bobY * 0.5
         } else {
             this.bobTimer = 0
-            this.camera.position.y += (1.7 - this.camera.position.y) * delta * 5
+            this.camera.position.y += (this.eyeHeight - this.camera.position.y) * delta * 5
             this.weapon.position.x += (0.3 - this.weapon.position.x) * delta * 5
             this.weapon.position.y += (-0.3 - this.weapon.position.y) * delta * 5
         }
