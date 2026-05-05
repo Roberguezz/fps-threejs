@@ -85,10 +85,9 @@ export class Player extends Object3D {
             // Si hay impacto, apuntamos a ese punto exacto
             targetPoint.copy(intersects[0].point);
         } else {
-            // Si no hay nada, proyectamos un punto a 100 metros hacia adelante
-            const camDir = new Vector3();
-            this.camera.getWorldDirection(camDir);
-            targetPoint.addVectors(this.camera.position, camDir.multiplyScalar(500));
+            // Si no hay nada, proyectamos un punto a 500 metros en la dirección del rayo
+            // Esto asegura que usamos la posición y dirección del mundo correctas
+            this.shootRaycaster.ray.at(500, targetPoint);
         }
 
         // 3. Calculamos la dirección real: desde el cañón hacia el punto de impacto
