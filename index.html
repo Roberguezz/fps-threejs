@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <title>fps-try4</title>
+</head>
+
+<body>
+  <canvas></canvas>
+  <script defer type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
+
+<style>
+  /* Contenedor principal de la mira */
+  #crosshair {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* Definimos el tamaño total del área de la mira (gap + líneas) */
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    /* Invisible para los clicks */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    /* Asegurar que esté por encima de todo */
+  }
+
+  /* Estilo base para las 4 líneas */
+  .crosshair-line {
+    position: absolute;
+    background-color: #00ff00;
+    /* Color Verde Neón Táctico (muy usado en FPS) */
+    /* Outline negro fino para contraste perfecto en cualquier mapa */
+    outline: 1px solid rgba(0, 0, 0, 0.8);
+    border-radius: 1px;
+    /* Bordes ligeramente suavizados */
+  }
+
+  /* --- CONFIGURACIÓN DE GEOMETRÍA --- */
+
+  /* Grosor de las líneas */
+  .line-h {
+    height: 2px;
+  }
+
+  .line-v {
+    width: 2px;
+  }
+
+  /* Longitud de las líneas */
+  .line-h {
+    width: 10px;
+  }
+
+  .line-v {
+    height: 10px;
+  }
+
+  /* Separación desde el centro (Gap) */
+  /* Ajusta este valor para abrir/cerrar la mira */
+  :root {
+    --crosshair-gap: 6px;
+  }
+
+  /* Posicionamiento preciso de cada línea */
+  .line-top {
+    top: calc(50% - var(--crosshair-gap) - 10px);
+    left: calc(50% - 1px);
+  }
+
+  .line-bottom {
+    bottom: calc(50% - var(--crosshair-gap) - 10px);
+    left: calc(50% - 1px);
+  }
+
+  .line-left {
+    left: calc(50% - var(--crosshair-gap) - 10px);
+    top: calc(50% - 1px);
+  }
+
+  .line-right {
+    right: calc(50% - var(--crosshair-gap) - 10px);
+    top: calc(50% - 1px);
+  }
+
+  #hitmarker {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+    /* Oculto por defecto */
+    z-index: 1001;
+  }
+
+  /* Forma de X para el hitmarker */
+  #hitmarker::before,
+  #hitmarker::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: #ff0000;
+    /* Rojo impacto */
+    left: 50%;
+  }
+
+  #hitmarker::before {
+    transform: rotate(45deg);
+  }
+
+  #hitmarker::after {
+    transform: rotate(-45deg);
+  }
+</style>
+
+<div id="crosshair">
+  <div class="crosshair-line line-v line-top"></div>
+  <div class="crosshair-line line-v line-bottom"></div>
+  <div class="crosshair-line line-h line-left"></div>
+  <div class="crosshair-line line-h line-right"></div>
+  <div id="hitmarker"></div>
+</div>
