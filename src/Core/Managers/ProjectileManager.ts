@@ -20,6 +20,8 @@ export class ProjectileManager {
     private scene: Scene;
     private projectiles: Projectile[] = [];
     private raycaster = new Raycaster();
+    private hitmarker: HTMLElement | null = null;
+    private hitmarkerTimeout: any = null;
 
     // Nueva propiedad para el DamageManager
     public damageManager?: DamageManager;
@@ -32,6 +34,7 @@ export class ProjectileManager {
 
     constructor(scene: Scene) {
         this.scene = scene;
+        this.hitmarker = document.getElementById('hitmarker');
     }
 
     /**
@@ -75,7 +78,7 @@ export class ProjectileManager {
             this.raycaster.far = distanceThisFrame + 0.1;
 
             const targets = sceneObjects || [];
-            const intersects = this.raycaster.intersectObjects(targets, true);
+            const intersects = this.raycaster.intersectObjects(targets, false);
 
             if (intersects.length > 0) {
                 const hitPoint = intersects[0].point;
@@ -108,11 +111,14 @@ export class ProjectileManager {
     }
 
     private showHitmarker() {
-        const hm = document.getElementById('hitmarker');
-        if (hm) {
-            hm.style.display = 'block';
-            setTimeout(() => {
-                if (hm) hm.style.display = 'none';
+        if (this.hitmarker) {
+            this.hitmarker.style.display = 'block';
+            
+            if (this.hitmarkerTimeout) clearTimeout(this.hitmarkerTimeout);
+            
+            this.hitmarkerTimeout = setTimeout(() => {
+                if (this.hitmarker) this.hitmarker.style.display = 'none';
+                this.hitmarkerTimeout = null;
             }, 100);
         }
     }
