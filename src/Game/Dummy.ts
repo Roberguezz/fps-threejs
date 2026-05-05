@@ -7,6 +7,13 @@ export class Dummy extends Mesh {
     private targetList: Object3D[];
     private scene: Scene;
 
+    // Feedback de daño
+    private hitTimer: number = 0;
+    private readonly hitDuration: number = 0.1;
+
+    // Vector auxiliar estático (compartido por todos los Dummies para ahorrar memoria)
+    private static _direction = new Vector3();
+
     constructor(pos: Vector3, scene: Scene, targetList: Object3D[]) {
         const geo = new BoxGeometry(1, 2, 1);
         const mat = new MeshStandardMaterial({ color: 0xff4444 });
@@ -22,13 +29,21 @@ export class Dummy extends Mesh {
 
     public update(delta: number, playerPos: Vector3) {
         // 1. Mirar hacia el jugador (solo en el eje Y para que no rote raro)
-        const direction = new Vector3().subVectors(playerPos, this.position);
+        const direction = Dummy._direction.subVectors(playerPos, this.position);
         direction.y = 0; // Mantener los pies en el suelo
 
-        if (direction.length() > 1) { // Si no está pegado al jugador
+        if (direction.lengthSq() > 1) { // 1^2 = 1. Más rápido que length()
             direction.normalize();
             this.position.addScaledVector(direction, this.speed * delta);
             this.lookAt(playerPos.x, this.position.y, playerPos.z);
+        }
+
+        // 2. Gestionar feedback visual
+        if (this.hitTimer > 0) {
+            this.hitTimer -= delta;
+            if (this.hitTimer <= 0) {
+                (this.material as MeshStandardMaterial).color.set(0xff4444);
+            }
         }
     }
 
@@ -38,9 +53,7 @@ export class Dummy extends Mesh {
         // Feedback visual de impacto
         const mat = this.material as MeshStandardMaterial;
         mat.color.set(0xffffff);
-        setTimeout(() => {  // evitar esto e intervalos (update y delta mejor)
-            if (this.hp > 0) mat.color.set(0xff4444);
-        }, 50);
+        this.hitTimer = this.hitDuration;
 
         console.log(`HP restante: ${this.hp}`);
 
