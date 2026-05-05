@@ -1,4 +1,4 @@
-import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3, Group } from "three";
+import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3 } from "three";
 
 export class DamageManager {
     private scene: Scene;
