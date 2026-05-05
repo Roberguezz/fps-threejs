@@ -3,30 +3,40 @@ import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3, Group } from "th
 export class DamageManager {
     private scene: Scene;
     private markers: { sprite: Sprite, velocity: Vector3, life: number }[] = [];
+    private textureCache: Map<number, CanvasTexture> = new Map();
 
     constructor(scene: Scene) {
         this.scene = scene;
     }
 
     public spawn(position: Vector3, amount: number) {
-        // 1. Crear un canvas para dibujar el número
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d')!;
+        let texture = this.textureCache.get(amount);
 
-        // 2. Estilo del texto
-        ctx.font = 'Bold 80px Arial';
-        ctx.fillStyle = 'yellow';
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 8;
-        ctx.textAlign = 'center';
-        ctx.strokeText(amount.toString(), 128, 128);
-        ctx.fillText(amount.toString(), 128, 128);
+        if (!texture) {
+            // Solo creamos el canvas y la textura si no existe ya para ese número
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; // Reducido de 256 para ahorrar memoria, 128 suele bastar
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d')!;
 
-        // 3. Crear textura y Sprite
-        const texture = new CanvasTexture(canvas);
-        const material = new SpriteMaterial({ map: texture, transparent: true });
+            ctx.font = 'Bold 60px Arial';
+            ctx.fillStyle = 'yellow';
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 6;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.strokeText(amount.toString(), 64, 64);
+            ctx.fillText(amount.toString(), 64, 64);
+
+            texture = new CanvasTexture(canvas);
+            this.textureCache.set(amount, texture);
+        }
+
+        const material = new SpriteMaterial({
+            map: texture,
+            transparent: true,
+            depthTest: false // Para que siempre se vea por encima si quieres
+        });
         const sprite = new Sprite(material);
 
         // Posición inicial con un poco de aleatoriedad para que no se solapen
@@ -51,7 +61,7 @@ export class DamageManager {
 
             if (m.life <= 0) {
                 this.scene.remove(m.sprite);
-                m.sprite.material.map?.dispose();
+                // IMPORTANTE: No borramos la textura del cache, solo el material del sprite
                 m.sprite.material.dispose();
                 this.markers.splice(i, 1);
                 continue;
