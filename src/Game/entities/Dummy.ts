@@ -3,7 +3,7 @@ import type { FPSScene } from '../../core/FPSScene'
 
 export class Dummy extends Mesh {
     public isDummy = true
-    public hp: number = 30 // Aumentado para que aguante más de un tiro de 10
+    public hp: number = 30
     private speed: number = 2
     private targetList: Object3D[]
     private scene: FPSScene
@@ -39,7 +39,7 @@ export class Dummy extends Mesh {
         if (this.hitTimer > 0) {
             this.hitTimer -= delta
             if (this.hitTimer <= 0) {
-                ;(this.material as MeshStandardMaterial).color.set(0xff4444)
+                ; (this.material as MeshStandardMaterial).color.set(0xff4444)
             }
         }
     }

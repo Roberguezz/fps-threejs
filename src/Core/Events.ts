@@ -1,5 +1,7 @@
 import { Vector3 } from 'three'
 
+
+// pasar a mitt  
 export const GameEvents = {
     PLAYER_SHOOT: 'PLAYER_SHOOT',
     ENEMY_HIT: 'ENEMY_HIT',

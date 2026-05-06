@@ -1,22 +1,33 @@
 import js from '@eslint/js'
 import tseslint from 'typescript-eslint'
-import prettier from 'eslint-plugin-prettier'
-import configPrettier from 'eslint-config-prettier'
 
 export default tseslint.config(
-    js.configs.recommended,
-    ...tseslint.configs.recommended,
-    {
-        plugins: {
-            prettier: prettier
-        },
-        rules: {
-            'prettier/prettier': 'error',
-            '@typescript-eslint/no-explicit-any': 'off'
-        }
-    },
-    configPrettier,
-    {
-        ignores: ['dist/']
-    }
+	js.configs.recommended,
+	...tseslint.configs.recommended,
+	{
+		rules: {
+			// ── Formatting ────────────────────────────────────────────────
+			'quotes': ['error', 'single', { avoidEscape: true }],
+			'semi': ['error', 'never'],
+			'indent': ['error', 'tab'],
+			'no-tabs': 'off',
+
+			// ── Style ─────────────────────────────────────────────────────
+			'comma-dangle': ['error', 'never'],
+			'eol-last': ['error', 'always'],
+			'no-trailing-spaces': 'error',
+			'object-curly-spacing': ['error', 'always'],
+			'keyword-spacing': ['error', { before: true, after: true }],
+			'space-infix-ops': 'error',
+			'arrow-spacing': ['error', { before: true, after: true }],
+
+			// ── TypeScript (override JS rules con variantes TS) ───────────
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/quotes': ['error', 'single', { avoidEscape: true }],
+			'@typescript-eslint/semi': ['error', 'never']
+		}
+	},
+	{
+		ignores: ['dist/']
+	}
 )

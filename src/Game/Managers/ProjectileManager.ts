@@ -23,7 +23,7 @@ export class ProjectileManager {
     private speed: number = 50
     private maxLife: number = 2
 
-    private geometry = new SphereGeometry(0.05, 8, 8)
+    private geometry = new SphereGeometry(2, 10, 10)
     private material = new MeshBasicMaterial({ color: new Color('yellow') })
 
     constructor(scene: Scene) {
@@ -63,6 +63,9 @@ export class ProjectileManager {
                 this.removeProjectile(i)
                 continue
             }
+
+            // Refactor, si la bola es muy grande traspasa el dummy, hay que arreglarlo
+            // usando un radio ...
 
             const distanceThisFrame = this.speed * dt
             this.raycaster.set(p.mesh.position, p.direction)
