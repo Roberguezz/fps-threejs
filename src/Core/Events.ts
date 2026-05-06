@@ -1,11 +1,11 @@
 import { Vector3 } from 'three'
 
 
-// pasar a mitt  
+// pasar a mitt
 export const GameEvents = {
-    PLAYER_SHOOT: 'PLAYER_SHOOT',
-    ENEMY_HIT: 'ENEMY_HIT',
-    ENEMY_DEATH: 'ENEMY_DEATH'
+	PLAYER_SHOOT: 'PLAYER_SHOOT',
+	ENEMY_HIT: 'ENEMY_HIT',
+	ENEMY_DEATH: 'ENEMY_DEATH'
 } as const
 
 export type GameEvents = (typeof GameEvents)[keyof typeof GameEvents]
@@ -34,35 +34,35 @@ type EventMap = {
 type Callback<T> = (data: T) => void
 
 export class EventEmitter {
-    private listeners: Map<keyof EventMap, Callback<any>[]> = new Map()
+	private listeners: Map<keyof EventMap, Callback<any>[]> = new Map()
 
-    public on<K extends keyof EventMap>(event: K, callback: Callback<EventMap[K]>) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, [])
-        }
+	public on<K extends keyof EventMap>(event: K, callback: Callback<EventMap[K]>) {
+		if (!this.listeners.has(event)) {
+			this.listeners.set(event, [])
+		}
         this.listeners.get(event)!.push(callback)
-    }
+	}
 
-    public off<K extends keyof EventMap>(event: K, callback: Callback<EventMap[K]>) {
-        const eventListeners = this.listeners.get(event)
-        if (eventListeners) {
-            this.listeners.set(
-                event,
-                eventListeners.filter((cb) => cb !== callback)
-            )
-        }
-    }
+	public off<K extends keyof EventMap>(event: K, callback: Callback<EventMap[K]>) {
+		const eventListeners = this.listeners.get(event)
+		if (eventListeners) {
+			this.listeners.set(
+				event,
+				eventListeners.filter((cb) => cb !== callback)
+			)
+		}
+	}
 
-    public emit<K extends keyof EventMap>(event: K, data: EventMap[K]) {
-        const eventListeners = this.listeners.get(event)
-        if (eventListeners) {
-            eventListeners.forEach((callback) => callback(data))
-        }
-    }
+	public emit<K extends keyof EventMap>(event: K, data: EventMap[K]) {
+		const eventListeners = this.listeners.get(event)
+		if (eventListeners) {
+			eventListeners.forEach((callback) => callback(data))
+		}
+	}
 
-    public clear() {
-        this.listeners.clear()
-    }
+	public clear() {
+		this.listeners.clear()
+	}
 }
 
 export const eventBus = new EventEmitter()

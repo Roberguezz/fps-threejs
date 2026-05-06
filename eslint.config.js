@@ -21,10 +21,8 @@ export default tseslint.config(
 			'space-infix-ops': 'error',
 			'arrow-spacing': ['error', { before: true, after: true }],
 
-			// ── TypeScript (override JS rules con variantes TS) ───────────
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/quotes': ['error', 'single', { avoidEscape: true }],
-			'@typescript-eslint/semi': ['error', 'never']
+			// ── TypeScript ────────────────────────────────────────────────
+			'@typescript-eslint/no-explicit-any': 'off'
 		}
 	},
 	{
