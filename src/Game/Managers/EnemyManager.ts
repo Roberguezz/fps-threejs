@@ -1,9 +1,10 @@
 import { Object3D, Vector3 } from 'three'
 import type { FPSScene } from '../../core/FPSScene'
+import type { IEnemy } from '../../shared/interfaces/IEnemy'
 import { Dummy } from '../entities/Dummy'
 
 export class EnemyManager {
-	private enemies: Dummy[] = []
+	private enemies: IEnemy[] = []
 	private spawnTimer: number = 0
 	private spawnRate: number = 3
 	private scene: FPSScene
@@ -27,7 +28,7 @@ export class EnemyManager {
 			const enemy = this.enemies[i]
 
 			// Si el enemigo ha muerto (ya no tiene padre en la escena)
-			if (!enemy.parent) {
+			if (!(enemy as any).parent) {
 				this.enemies.splice(i, 1)
 				continue
 			}

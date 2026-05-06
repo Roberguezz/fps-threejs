@@ -3,11 +3,13 @@ import { CameraManager } from './managers/CameraManager'
 import { RenderManager } from './managers/RenderManager'
 import { FPSScene } from './FPSScene'
 import { LightManager } from './managers/LightManager'
+import { WorldBuilder } from './managers/WorldBuilder'
 import { Player } from '../game/entities/Player'
 import { InputManager } from './InputManager'
 import { ProjectileManager } from '../game/managers/ProjectileManager'
 import { EnemyManager } from '../game/managers/EnemyManager'
-import { DamageManager } from '../game/managers/DamageManager'
+import { DamageApplier } from '../game/managers/DamageApplier'
+import { DamageNumberView } from '../game/managers/DamageNumberView'
 import { UIManager } from '../game/managers/UIManager'
 
 export class Engine {
@@ -18,7 +20,8 @@ export class Engine {
 	private input: InputManager
 	private enemyManager: EnemyManager
 	private projectileManager: ProjectileManager
-	private damageManager: DamageManager
+	private damageApplier: DamageApplier
+	private damageNumberView: DamageNumberView
 	private uiManager: UIManager
 	private player: Player
 	private timer: Timer
@@ -32,13 +35,15 @@ export class Engine {
 
 		// 2. Gameplay Managers
 		this.projectileManager = new ProjectileManager(this.scene)
-		this.damageManager = new DamageManager(this.scene)
+		this.damageApplier = new DamageApplier()
+		this.damageNumberView = new DamageNumberView(this.scene)
 
 		// 3. Entities
 		this.player = new Player(this.scene, this.cameraManager)
 		this.enemyManager = new EnemyManager(this.scene, this.scene.shootableObjects)
 
 		// 4. Initialization
+		WorldBuilder.buildFloor(this.scene) // Construir el suelo
 		this.cameraManager.setPlayer(this.player)
 		this.renderManager = new RenderManager(this.cameraManager)
 		this.lightManager = new LightManager(this.scene)
@@ -58,7 +63,7 @@ export class Engine {
 		this.player.update(cappedDelta, this.input)
 		this.enemyManager.update(cappedDelta, this.player.position)
 		this.projectileManager.update(cappedDelta, this.scene.shootableObjects)
-		this.damageManager.update(cappedDelta)
+		this.damageNumberView.update(cappedDelta)
 
 		// --- RENDER ---
 		this.renderManager.superRender(this.scene)

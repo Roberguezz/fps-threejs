@@ -2,31 +2,25 @@ import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3 } from 'three'
 import { eventBus, GameEvents } from '../../core/Events'
 import type { EnemyHitEvent } from '../../core/Events'
 
-export class DamageManager {
+/**
+ * Responsable exclusivamente de renderizar los números de daño flotantes.
+ * Sin lógica de juego. Pura vista Three.js.
+ */
+export class DamageNumberView {
 	private scene: Scene
-	private markers: { sprite: Sprite; velocity: Vector3; life: number }[] = []
-	private textureCache: Map<number, CanvasTexture> = new Map()
+	public markers: { sprite: Sprite; velocity: Vector3; life: number }[] = []
+	public textureCache: Map<number, CanvasTexture> = new Map()
 
 	constructor(scene: Scene) {
 		this.scene = scene
 
-		// Escuchar impactos
+		// Escuchar impactos para spawnear número de daño
 		this.onEnemyHit = this.onEnemyHit.bind(this)
 		eventBus.on(GameEvents.ENEMY_HIT, this.onEnemyHit)
 	}
 
 	private onEnemyHit(data: EnemyHitEvent) {
-		const { target, damage, position } = data
-
-		// 1. Lógica matemática: Restar vida
-		if (target && typeof target.takeDamage === 'function') {
-			target.takeDamage(damage)
-
-			// Si el objetivo ha muerto
-			if (target.hp <= 0) {
-				eventBus.emit(GameEvents.ENEMY_DEATH, { target })
-			}
-		}
+		const { damage, position } = data
 
 		// 2. Lógica visual: Spawnear número de daño
 		this.spawn(position, damage)

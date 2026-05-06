@@ -1,23 +1,25 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3, Object3D } from 'three'
 import type { FPSScene } from '../../core/FPSScene'
+import type { IEnemy } from '../../shared/interfaces/IEnemy'
+import { DummyModel } from './DummyModel'
 
-export class Dummy extends Mesh {
+/**
+ * Vista del enemigo Dummy.
+ * Extiende Mesh para ser el objeto colisionable de la escena.
+ * Delega toda la lógica de juego a DummyModel.
+ */
+export class Dummy extends Mesh implements IEnemy {
 	public isDummy = true
-	public hp: number = 30
-	private speed: number = 2
+	private model: DummyModel
 	private targetList: Object3D[]
 	private scene: FPSScene
-
-	private hitTimer: number = 0
-	private readonly hitDuration: number = 0.1
-
-	private static _direction = new Vector3()
 
 	constructor(pos: Vector3, scene: FPSScene, targetList: Object3D[]) {
 		const geo = new BoxGeometry(1, 2, 1)
 		const mat = new MeshStandardMaterial({ color: 0xff4444 })
 		super(geo, mat)
 
+		this.model = new DummyModel()
 		this.position.copy(pos)
 		this.scene = scene
 		this.targetList = targetList
@@ -26,32 +28,34 @@ export class Dummy extends Mesh {
 		this.targetList.push(this)
 	}
 
-	public update(delta: number, playerPos: Vector3) {
-		const direction = Dummy._direction.subVectors(playerPos, this.position)
-		direction.y = 0
+	// Delegado a DummyModel para cumplir IHittable
+	public get hp(): number {
+		return this.model.hp
+	}
 
-		if (direction.lengthSq() > 1) {
-			direction.normalize()
-			this.position.addScaledVector(direction, this.speed * delta)
+	public update(delta: number, playerPos: Vector3) {
+		// Delegar cálculo de movimiento al modelo
+		const movement = this.model.computeMovement(delta, this.position, playerPos)
+		if (movement) {
+			this.position.add(movement)
 			this.lookAt(playerPos.x, this.position.y, playerPos.z)
 		}
 
-		if (this.hitTimer > 0) {
-			this.hitTimer -= delta
-			if (this.hitTimer <= 0) {
-				; (this.material as MeshStandardMaterial).color.set(0xff4444)
-			}
+		// Vista: restaurar color cuando el timer de impacto expira
+		const hitExpired = this.model.decrementHitTimer(delta)
+		if (hitExpired) {
+			; (this.material as MeshStandardMaterial).color.set(0xff4444)
 		}
 	}
 
 	public takeDamage(amount: number) {
-		this.hp -= amount
+		this.model.takeDamage(amount)
 
+		// Vista: feedback visual de impacto (color blanco)
 		const mat = this.material as MeshStandardMaterial
 		mat.color.set(0xffffff)
-		this.hitTimer = this.hitDuration
 
-		if (this.hp <= 0) {
+		if (this.model.isDead()) {
 			this.die()
 		}
 	}

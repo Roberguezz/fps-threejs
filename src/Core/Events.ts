@@ -1,4 +1,5 @@
 import { Vector3 } from 'three'
+import type { IHittable } from '../shared/interfaces/IHittable'
 
 
 // pasar a mitt
@@ -11,24 +12,24 @@ export const GameEvents = {
 export type GameEvents = (typeof GameEvents)[keyof typeof GameEvents]
 
 export interface PlayerShootEvent {
-    position: Vector3
-    direction: Vector3
+	position: Vector3
+	direction: Vector3
 }
 
 export interface EnemyHitEvent {
-    target: any // Debería ser algo que tenga salud
-    damage: number
-    position: Vector3
+	target: IHittable // Debería ser algo que tenga salud
+	damage: number
+	position: Vector3
 }
 
 export interface EnemyDeathEvent {
-    target: any
+	target: IHittable
 }
 
 type EventMap = {
-    [GameEvents.PLAYER_SHOOT]: PlayerShootEvent
-    [GameEvents.ENEMY_HIT]: EnemyHitEvent
-    [GameEvents.ENEMY_DEATH]: EnemyDeathEvent
+	[GameEvents.PLAYER_SHOOT]: PlayerShootEvent
+	[GameEvents.ENEMY_HIT]: EnemyHitEvent
+	[GameEvents.ENEMY_DEATH]: EnemyDeathEvent
 }
 
 type Callback<T> = (data: T) => void
@@ -40,7 +41,7 @@ export class EventEmitter {
 		if (!this.listeners.has(event)) {
 			this.listeners.set(event, [])
 		}
-        this.listeners.get(event)!.push(callback)
+		this.listeners.get(event)!.push(callback)
 	}
 
 	public off<K extends keyof EventMap>(event: K, callback: Callback<EventMap[K]>) {

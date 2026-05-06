@@ -1,9 +1,9 @@
 import { PerspectiveCamera } from 'three'
-import type { Player } from '../../game/entities/Player'
+import type { ICameraTarget } from '../../shared/interfaces/ICameraTarget'
 
 export class CameraManager {
 	public camera: PerspectiveCamera
-	private player?: Player
+	private player?: ICameraTarget
 	private sensitivity: number = 0.002
 
 	constructor() {
@@ -38,7 +38,7 @@ export class CameraManager {
 		})
 	}
 
-	public setPlayer(player: Player) {
+	public setPlayer(player: ICameraTarget) {
 		this.player = player
 	}
 }
