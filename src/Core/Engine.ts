@@ -1,45 +1,47 @@
 import { Timer } from "three";
-import { CameraManager } from "./Managers/CameraManager";
-import { RenderManager } from "./Managers/RenderManager";
-import { FPSScene } from "./Managers/FPSScene";
-import { LigthManager } from "./Managers/LightManager";
-import { Player } from "../Game/Player";
-import { InputManager } from "../Game/Managers/InputManager";
-import { ProjectileManager } from "./Managers/ProjectileManager";
-import { EnemyManager } from "../Game/Managers/EnemyManager";
-import { DamageManager } from "../Game/Managers/DamageManager";
+import { CameraManager } from "./managers/CameraManager";
+import { RenderManager } from "./managers/RenderManager";
+import { FPSScene } from "./FPSScene";
+import { LightManager } from "./managers/LightManager";
+import { Player } from "../game/entities/Player";
+import { InputManager } from "./InputManager";
+import { ProjectileManager } from "../game/managers/ProjectileManager";
+import { EnemyManager } from "../game/managers/EnemyManager";
+import { DamageManager } from "../game/managers/DamageManager";
+import { UIManager } from "../game/managers/UIManager";
 
 export class Engine {
-    private fpsScene: FPSScene
+    private scene: FPSScene
     private renderManager: RenderManager
     private cameraManager: CameraManager
-    private lightManager: LigthManager
-    private inputManager: InputManager
+    private lightManager: LightManager
+    private input: InputManager
     private enemyManager: EnemyManager
     private projectileManager: ProjectileManager
-    private damageManager: DamageManager // <--- Manager de números
+    private damageManager: DamageManager
+    private uiManager: UIManager
     private player: Player
     private timer: Timer
 
     constructor() {
-        this.fpsScene = new FPSScene()
+        // 1. Core Infrastructure
+        this.scene = new FPSScene()
         this.cameraManager = new CameraManager()
+        this.input = new InputManager()
+        this.uiManager = new UIManager()
 
-        this.projectileManager = new ProjectileManager(this.fpsScene)
-        this.fpsScene.projectileManager = this.projectileManager
+        // 2. Gameplay Managers
+        this.projectileManager = new ProjectileManager(this.scene)
+        this.damageManager = new DamageManager(this.scene)
+        
+        // 3. Entities
+        this.player = new Player(this.scene, this.cameraManager)
+        this.enemyManager = new EnemyManager(this.scene, this.scene.shootableObjects)
 
-        this.damageManager = new DamageManager(this.fpsScene);
-        // Inyectamos el manager en el sistema de proyectiles
-        this.projectileManager.setDamageManager(this.damageManager);
-
-        this.player = new Player(this.fpsScene, this.cameraManager)
-        this.enemyManager = new EnemyManager(this.fpsScene, this.fpsScene.shootableObjects);
-
+        // 4. Initialization
         this.cameraManager.setPlayer(this.player)
-
         this.renderManager = new RenderManager(this.cameraManager)
-        this.lightManager = new LigthManager(this.fpsScene)
-        this.inputManager = new InputManager()
+        this.lightManager = new LightManager(this.scene)
 
         this.timer = new Timer()
 
@@ -53,15 +55,13 @@ export class Engine {
         const cappedDelta = Math.min(delta, 0.05);
 
         // --- UPDATES ---
-        this.player.update(cappedDelta, this.inputManager);
+        this.player.update(cappedDelta, this.input);
         this.enemyManager.update(cappedDelta, this.player.position);
-        this.projectileManager.update(cappedDelta, this.fpsScene.shootableObjects);
-
-        // ¡IMPORTANTE! Si no actualizas el damageManager, los números no flotan ni mueren
+        this.projectileManager.update(cappedDelta, this.scene.shootableObjects);
         this.damageManager.update(cappedDelta);
 
         // --- RENDER ---
-        this.renderManager.superRender(this.fpsScene);
+        this.renderManager.superRender(this.scene);
 
         requestAnimationFrame(() => this.loop());
     }

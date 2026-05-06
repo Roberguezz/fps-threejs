@@ -1,14 +1,15 @@
-import { Scene, Object3D, Vector3 } from "three";
-import { Dummy } from "../../Game/Dummy";
+import { Object3D, Vector3 } from "three";
+import type { FPSScene } from "../../core/FPSScene";
+import { Dummy } from "../entities/Dummy";
 
 export class EnemyManager {
     private enemies: Dummy[] = [];
     private spawnTimer: number = 0;
     private spawnRate: number = 3;
-    private scene: Scene
+    private scene: FPSScene
     private targetList: Object3D[]
 
-    constructor(scene: Scene, targetList: Object3D[]) {
+    constructor(scene: FPSScene, targetList: Object3D[]) {
         this.scene = scene
         this.targetList = targetList
     }

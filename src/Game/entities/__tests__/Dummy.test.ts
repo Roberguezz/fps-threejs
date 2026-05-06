@@ -1,20 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { Vector3, Scene, Object3D } from 'three'
+import { Vector3, Object3D, Scene } from 'three'
 import { Dummy } from '../Dummy'
+import { FPSScene } from '../../../core/FPSScene'
 
 describe('Dummy', () => {
-    let scene: Scene
+    let scene: FPSScene
     let targetList: Object3D[]
     let dummy: Dummy
 
     beforeEach(() => {
-        scene = new Scene()
+        scene = new FPSScene()
         targetList = []
         dummy = new Dummy(new Vector3(0, 0, 0), scene, targetList)
     })
 
     it('should initialize with correct HP', () => {
-        expect(dummy['hp']).toBe(3)
+        expect(dummy.hp).toBe(30)
         expect(dummy.isDummy).toBe(true)
     })
 
@@ -24,22 +25,20 @@ describe('Dummy', () => {
     })
 
     it('should take damage correctly', () => {
-        dummy.takeDamage()
-        expect(dummy['hp']).toBe(2)
+        dummy.takeDamage(10)
+        expect(dummy.hp).toBe(20)
     })
 
     it('should die when HP reaches 0', () => {
         const dieSpy = vi.spyOn(dummy as any, 'die')
-        dummy.takeDamage() // 2
-        dummy.takeDamage() // 1
-        dummy.takeDamage() // 0
+        dummy.takeDamage(10) // 20
+        dummy.takeDamage(10) // 10
+        dummy.takeDamage(10) // 0
         expect(dieSpy).toHaveBeenCalled()
     })
 
     it('should be removed from scene and targetList when dead', () => {
-        dummy.takeDamage()
-        dummy.takeDamage()
-        dummy.takeDamage()
+        dummy.takeDamage(30)
         expect(scene.children).not.toContain(dummy)
         expect(targetList).not.toContain(dummy)
     })

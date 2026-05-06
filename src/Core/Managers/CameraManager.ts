@@ -1,5 +1,5 @@
 import { PerspectiveCamera } from "three"
-import type { Player } from "../../Game/Player"
+import type { Player } from "../../game/entities/Player"
 
 export class CameraManager {
     public camera: PerspectiveCamera

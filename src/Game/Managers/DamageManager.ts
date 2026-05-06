@@ -1,4 +1,6 @@
 import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3 } from "three";
+import { eventBus, GameEvents } from "../../core/Events";
+import type { EnemyHitEvent } from "../../core/Events";
 
 export class DamageManager {
     private scene: Scene;
@@ -7,15 +9,35 @@ export class DamageManager {
 
     constructor(scene: Scene) {
         this.scene = scene;
+
+        // Escuchar impactos
+        this.onEnemyHit = this.onEnemyHit.bind(this);
+        eventBus.on(GameEvents.ENEMY_HIT, this.onEnemyHit);
+    }
+
+    private onEnemyHit(data: EnemyHitEvent) {
+        const { target, damage, position } = data;
+
+        // 1. Lógica matemática: Restar vida
+        if (target && typeof target.takeDamage === 'function') {
+            target.takeDamage(damage);
+
+            // Si el objetivo ha muerto
+            if (target.hp <= 0) {
+                eventBus.emit(GameEvents.ENEMY_DEATH, { target });
+            }
+        }
+
+        // 2. Lógica visual: Spawnear número de daño
+        this.spawn(position, damage);
     }
 
     public spawn(position: Vector3, amount: number) {
         let texture = this.textureCache.get(amount);
 
         if (!texture) {
-            // Solo creamos el canvas y la textura si no existe ya para ese número
             const canvas = document.createElement('canvas');
-            canvas.width = 128; // Reducido de 256 para ahorrar memoria, 128 suele bastar
+            canvas.width = 128;
             canvas.height = 128;
             const ctx = canvas.getContext('2d')!;
 
@@ -35,22 +57,20 @@ export class DamageManager {
         const material = new SpriteMaterial({
             map: texture,
             transparent: true,
-            depthTest: false // Para que siempre se vea por encima si quieres
+            depthTest: false
         });
         const sprite = new Sprite(material);
 
-        // Posición inicial con un poco de aleatoriedad para que no se solapen
         sprite.position.copy(position);
-        sprite.position.y += 1; // Un poco por encima del impacto
+        sprite.position.y += 1;
         sprite.scale.set(1.5, 1.5, 1);
 
         this.scene.add(sprite);
 
-        // 4. Guardar para animar
         this.markers.push({
             sprite: sprite,
             velocity: new Vector3((Math.random() - 0.5) * 0.5, 2, (Math.random() - 0.5) * 0.5),
-            life: 1.0 // 1 segundo de vida
+            life: 1.0
         });
     }
 
@@ -61,16 +81,17 @@ export class DamageManager {
 
             if (m.life <= 0) {
                 this.scene.remove(m.sprite);
-                // IMPORTANTE: No borramos la textura del cache, solo el material del sprite
                 m.sprite.material.dispose();
                 this.markers.splice(i, 1);
                 continue;
             }
 
-            // Mover hacia arriba y un poco a los lados
             m.sprite.position.addScaledVector(m.velocity, delta);
-            // Hacer que desaparezca poco a poco (fade out)
             m.sprite.material.opacity = m.life;
         }
+    }
+
+    public dispose() {
+        eventBus.off(GameEvents.ENEMY_HIT, this.onEnemyHit);
     }
 }
