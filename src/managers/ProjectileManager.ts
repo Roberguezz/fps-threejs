@@ -23,7 +23,7 @@ export class ProjectileManager {
 	private speed: number = 50
 	private maxLife: number = 2
 
-	private geometry = new SphereGeometry(2, 10, 10)
+	private geometry = new SphereGeometry(0.1, 8, 8)
 	private material = new MeshBasicMaterial({ color: new Color('yellow') })
 
 	constructor(scene: Scene) {
