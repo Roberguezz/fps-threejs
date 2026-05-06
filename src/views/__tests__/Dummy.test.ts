@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Vector3, Object3D } from 'three'
 import { Dummy } from '../Dummy'
-import { FPSScene } from '../../../core/FPSScene'
+import { FPSScene } from '../../views/FPSScene'
 
 describe('Dummy', () => {
 	let scene: FPSScene

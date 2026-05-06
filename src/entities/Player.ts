@@ -8,10 +8,10 @@ import {
 	Vector3,
 	Vector2
 } from 'three'
-import type { FPSScene } from '../../core/FPSScene'
-import type { InputManager } from '../../core/InputManager'
-import type { CameraManager } from '../../core/managers/CameraManager'
-import { eventBus, GameEvents } from '../../core/Events'
+import type { FPSScene } from '../views/FPSScene'
+import type { InputManager } from '../core/InputManager'
+import type { CameraManager } from '../views/CameraManager'
+import { eventBus, GameEvents } from '../core/Events'
 
 export class Player extends Object3D {
 	private speed: number = 10

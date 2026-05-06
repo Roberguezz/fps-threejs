@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Scene, Vector3 } from 'three'
 import { DamageNumbers } from '../DamageNumbers'
-import { eventBus, GameEvents } from '../../../core/Events'
-import type { IHittable } from '../../../shared/interfaces/IHittable'
+import { eventBus, GameEvents } from '../../core/Events'
+import type { IHittable } from '../../shared/interfaces/IHittable'
 
 describe('DamageNumbers', () => {
 	let scene: Scene

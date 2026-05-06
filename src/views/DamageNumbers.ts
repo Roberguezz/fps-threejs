@@ -1,6 +1,6 @@
 import { Sprite, SpriteMaterial, CanvasTexture, Scene, Vector3 } from 'three'
-import { eventBus, GameEvents } from '../../core/Events'
-import type { EnemyHitEvent } from '../../core/Events'
+import { eventBus, GameEvents } from '../core/Events'
+import type { EnemyHitEvent } from '../core/Events'
 
 /**
  * Responsable exclusivamente de renderizar los números de daño flotantes.

@@ -8,12 +8,12 @@ import {
 	Object3D,
 	Raycaster
 } from 'three'
-import { eventBus, GameEvents } from '../../core/Events'
+import { eventBus, GameEvents } from '../core/Events'
 
 interface Projectile {
-    mesh: Mesh
-    direction: Vector3
-    lifeTime: number
+	mesh: Mesh
+	direction: Vector3
+	lifeTime: number
 }
 
 export class ProjectileManager {

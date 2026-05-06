@@ -1,5 +1,5 @@
 import { PerspectiveCamera } from 'three'
-import type { ICameraTarget } from '../../shared/interfaces/ICameraTarget'
+import type { ICameraTarget } from '../shared/interfaces/ICameraTarget'
 
 export class CameraManager {
 	public camera: PerspectiveCamera

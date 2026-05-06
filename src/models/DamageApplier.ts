@@ -1,5 +1,5 @@
-import { eventBus, GameEvents } from '../../core/Events'
-import type { EnemyHitEvent } from '../../core/Events'
+import { eventBus, GameEvents } from '../core/Events'
+import type { EnemyHitEvent } from '../core/Events'
 
 /**
  * Responsable exclusivamente de aplicar daño a entidades y emitir ENEMY_DEATH.

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { DamageApplier } from '../DamageApplier'
-import { eventBus, GameEvents } from '../../../core/Events'
-import type { IHittable } from '../../../shared/interfaces/IHittable'
+import { eventBus, GameEvents } from '../../core/Events'
+import type { IHittable } from '../../shared/interfaces/IHittable'
 import { Vector3 } from 'three'
 
 describe('DamageApplier', () => {

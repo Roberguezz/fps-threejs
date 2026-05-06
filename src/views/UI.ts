@@ -1,4 +1,4 @@
-import { eventBus, GameEvents } from '../../core/Events'
+import { eventBus, GameEvents } from '../core/Events'
 
 export class UI {
 	private hitmarker: HTMLElement | null = null

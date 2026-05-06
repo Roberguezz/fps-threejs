@@ -1,5 +1,5 @@
 import { Vector3 } from 'three'
-import type { IHittable } from '../../shared/interfaces/IHittable'
+import type { IHittable } from '../shared/interfaces/IHittable'
 
 /**
  * Estado y lógica pura del enemigo Dummy.

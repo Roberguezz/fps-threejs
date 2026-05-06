@@ -1,6 +1,6 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3, Object3D } from 'three'
-import type { FPSScene } from '../../core/FPSScene'
-import type { IEnemy } from '../../shared/interfaces/IEnemy'
+import type { FPSScene } from './FPSScene'
+import type { IEnemy } from '../shared/interfaces/IEnemy'
 import { DummyModel } from '../models/DummyModel'
 
 /**

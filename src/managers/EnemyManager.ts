@@ -1,6 +1,6 @@
 import { Object3D, Vector3 } from 'three'
-import type { FPSScene } from '../../core/FPSScene'
-import type { IEnemy } from '../../shared/interfaces/IEnemy'
+import type { FPSScene } from '../views/FPSScene'
+import type { IEnemy } from '../shared/interfaces/IEnemy'
 import { Dummy } from '../views/Dummy'
 
 export class EnemyManager {
