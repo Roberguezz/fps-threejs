@@ -77,7 +77,7 @@ El proyecto utiliza un linter avanzado con formato automático nativo (sin depen
 
 | Comando | Descripción |
 |---|---|
-| `pnpm run dev` | Inicia el servidor de desarrollo ultrarrápido con Vite. |
+| `pnpm run dev` | Inicia el servidor de desarrollo con Vite. |
 | `pnpm run build` | Compila TypeScript y empaqueta la versión lista para producción. |
 | `pnpm run test` | Ejecuta la batería completa de tests unitarios (Vitest). |
 | `pnpm run lint` | Comprueba problemas de estilo e indentación (ESLint). |
@@ -94,5 +94,5 @@ El proyecto utiliza un linter avanzado con formato automático nativo (sin depen
 
 <br/>
 <div align="center">
-  <i>Desarrollado con pasión usando Three.js</i>
+  <i>Desarrollado usando Three.js</i>
 </div>
