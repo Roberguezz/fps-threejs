@@ -6,7 +6,7 @@ import type { EnemyHitEvent } from '../../core/Events'
  * Responsable exclusivamente de renderizar los números de daño flotantes.
  * Sin lógica de juego. Pura vista Three.js.
  */
-export class DamageNumberView {
+export class DamageNumbers {
 	private scene: Scene
 	public markers: { sprite: Sprite; velocity: Vector3; life: number }[] = []
 	public textureCache: Map<number, CanvasTexture> = new Map()

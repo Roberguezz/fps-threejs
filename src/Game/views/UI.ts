@@ -1,6 +1,6 @@
 import { eventBus, GameEvents } from '../../core/Events'
 
-export class UIManager {
+export class UI {
 	private hitmarker: HTMLElement | null = null
 	private hitmarkerTimeout: any = null
 

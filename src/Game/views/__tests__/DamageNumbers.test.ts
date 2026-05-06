@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Scene, Vector3 } from 'three'
-import { DamageNumberView } from '../DamageNumberView'
+import { DamageNumbers } from '../DamageNumbers'
 import { eventBus, GameEvents } from '../../../core/Events'
 import type { IHittable } from '../../../shared/interfaces/IHittable'
 
-describe('DamageNumberView', () => {
+describe('DamageNumbers', () => {
 	let scene: Scene
-	let view: DamageNumberView
+	let view: DamageNumbers
 
 	beforeEach(() => {
 		// Mock Canvas context
@@ -17,7 +17,7 @@ describe('DamageNumberView', () => {
 		} as any)
 
 		scene = new Scene()
-		view = new DamageNumberView(scene)
+		view = new DamageNumbers(scene)
 	})
 
 	it('should spawn a marker and cache the texture', () => {

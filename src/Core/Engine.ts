@@ -8,9 +8,9 @@ import { Player } from '../game/entities/Player'
 import { InputManager } from './InputManager'
 import { ProjectileManager } from '../game/managers/ProjectileManager'
 import { EnemyManager } from '../game/managers/EnemyManager'
-import { DamageApplier } from '../game/managers/DamageApplier'
-import { DamageNumberView } from '../game/managers/DamageNumberView'
-import { UIManager } from '../game/managers/UIManager'
+import { DamageApplier } from '../game/models/DamageApplier'
+import { DamageNumbers } from '../game/views/DamageNumbers'
+import { UI } from '../game/views/UI'
 
 export class Engine {
 	private scene: FPSScene
@@ -21,8 +21,8 @@ export class Engine {
 	private enemyManager: EnemyManager
 	private projectileManager: ProjectileManager
 	private damageApplier: DamageApplier
-	private damageNumberView: DamageNumberView
-	private uiManager: UIManager
+	private damageNumbers: DamageNumbers
+	private ui: UI
 	private player: Player
 	private timer: Timer
 
@@ -31,12 +31,12 @@ export class Engine {
 		this.scene = new FPSScene()
 		this.cameraManager = new CameraManager()
 		this.input = new InputManager()
-		this.uiManager = new UIManager()
+		this.ui = new UI()
 
 		// 2. Gameplay Managers
 		this.projectileManager = new ProjectileManager(this.scene)
 		this.damageApplier = new DamageApplier()
-		this.damageNumberView = new DamageNumberView(this.scene)
+		this.damageNumbers = new DamageNumbers(this.scene)
 
 		// 3. Entities
 		this.player = new Player(this.scene, this.cameraManager)
@@ -63,7 +63,7 @@ export class Engine {
 		this.player.update(cappedDelta, this.input)
 		this.enemyManager.update(cappedDelta, this.player.position)
 		this.projectileManager.update(cappedDelta, this.scene.shootableObjects)
-		this.damageNumberView.update(cappedDelta)
+		this.damageNumbers.update(cappedDelta)
 
 		// --- RENDER ---
 		this.renderManager.superRender(this.scene)

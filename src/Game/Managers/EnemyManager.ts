@@ -1,7 +1,7 @@
 import { Object3D, Vector3 } from 'three'
 import type { FPSScene } from '../../core/FPSScene'
 import type { IEnemy } from '../../shared/interfaces/IEnemy'
-import { Dummy } from '../entities/Dummy'
+import { Dummy } from '../views/Dummy'
 
 export class EnemyManager {
 	private enemies: IEnemy[] = []
