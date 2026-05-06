@@ -12,7 +12,7 @@ describe('DamageManager', () => {
         vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
             fillText: vi.fn(),
             strokeText: vi.fn(),
-            measureText: vi.fn(() => ({ width: 0 })),
+            measureText: vi.fn(() => ({ width: 0 }))
         } as any)
 
         scene = new Scene()
@@ -48,16 +48,16 @@ describe('DamageManager', () => {
     })
 
     it('should react to ENEMY_HIT event', () => {
-        const spy = vi.spyOn(manager, 'spawn');
-        const mockTarget = { takeDamage: vi.fn(), hp: 10 };
-        
+        const spy = vi.spyOn(manager, 'spawn')
+        const mockTarget = { takeDamage: vi.fn(), hp: 10 }
+
         eventBus.emit(GameEvents.ENEMY_HIT, {
             target: mockTarget,
             damage: 10,
             position: new Vector3(0, 0, 0)
-        });
+        })
 
-        expect(mockTarget.takeDamage).toHaveBeenCalledWith(10);
-        expect(spy).toHaveBeenCalled();
+        expect(mockTarget.takeDamage).toHaveBeenCalledWith(10)
+        expect(spy).toHaveBeenCalled()
     })
 })

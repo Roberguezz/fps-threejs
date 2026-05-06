@@ -1,7 +1,6 @@
-import { Engine } from "./core/Engine";
+import { Engine } from './core/Engine'
 
 // Fase inicializar motorcin
-const game = new Engine()
+new Engine()
 
-console.log("Buen inicio crack")
-
+console.log('Buen inicio crack')

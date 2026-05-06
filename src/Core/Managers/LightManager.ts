@@ -1,5 +1,5 @@
-import { AmbientLight, DirectionalLight } from "three";
-import type { FPSScene } from "../FPSScene";
+import { AmbientLight, DirectionalLight } from 'three'
+import type { FPSScene } from '../FPSScene'
 
 export class LightManager {
     public ambient: AmbientLight

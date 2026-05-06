@@ -1,14 +1,14 @@
-import { Timer } from "three";
-import { CameraManager } from "./managers/CameraManager";
-import { RenderManager } from "./managers/RenderManager";
-import { FPSScene } from "./FPSScene";
-import { LightManager } from "./managers/LightManager";
-import { Player } from "../game/entities/Player";
-import { InputManager } from "./InputManager";
-import { ProjectileManager } from "../game/managers/ProjectileManager";
-import { EnemyManager } from "../game/managers/EnemyManager";
-import { DamageManager } from "../game/managers/DamageManager";
-import { UIManager } from "../game/managers/UIManager";
+import { Timer } from 'three'
+import { CameraManager } from './managers/CameraManager'
+import { RenderManager } from './managers/RenderManager'
+import { FPSScene } from './FPSScene'
+import { LightManager } from './managers/LightManager'
+import { Player } from '../game/entities/Player'
+import { InputManager } from './InputManager'
+import { ProjectileManager } from '../game/managers/ProjectileManager'
+import { EnemyManager } from '../game/managers/EnemyManager'
+import { DamageManager } from '../game/managers/DamageManager'
+import { UIManager } from '../game/managers/UIManager'
 
 export class Engine {
     private scene: FPSScene
@@ -33,7 +33,7 @@ export class Engine {
         // 2. Gameplay Managers
         this.projectileManager = new ProjectileManager(this.scene)
         this.damageManager = new DamageManager(this.scene)
-        
+
         // 3. Entities
         this.player = new Player(this.scene, this.cameraManager)
         this.enemyManager = new EnemyManager(this.scene, this.scene.shootableObjects)
@@ -49,20 +49,20 @@ export class Engine {
     }
 
     private loop() {
-        this.timer.update();
-        let delta = this.timer.getDelta();
-        if (delta <= 0) delta = 1 / 60;
-        const cappedDelta = Math.min(delta, 0.05);
+        this.timer.update()
+        let delta = this.timer.getDelta()
+        if (delta <= 0) delta = 1 / 60
+        const cappedDelta = Math.min(delta, 0.05)
 
         // --- UPDATES ---
-        this.player.update(cappedDelta, this.input);
-        this.enemyManager.update(cappedDelta, this.player.position);
-        this.projectileManager.update(cappedDelta, this.scene.shootableObjects);
-        this.damageManager.update(cappedDelta);
+        this.player.update(cappedDelta, this.input)
+        this.enemyManager.update(cappedDelta, this.player.position)
+        this.projectileManager.update(cappedDelta, this.scene.shootableObjects)
+        this.damageManager.update(cappedDelta)
 
         // --- RENDER ---
-        this.renderManager.superRender(this.scene);
+        this.renderManager.superRender(this.scene)
 
-        requestAnimationFrame(() => this.loop());
+        requestAnimationFrame(() => this.loop())
     }
 }

@@ -1,5 +1,5 @@
-import { PerspectiveCamera } from "three"
-import type { Player } from "../../game/entities/Player"
+import { PerspectiveCamera } from 'three'
+import type { Player } from '../../game/entities/Player'
 
 export class CameraManager {
     public camera: PerspectiveCamera
@@ -17,7 +17,6 @@ export class CameraManager {
         window.addEventListener('mousemove', (e) => {
             // Solo rotamos si el ratón está bloqueado y tenemos un jugador
             if (document.pointerLockElement && this.player) {
-
                 // 1. ROTACIÓN HORIZONTAL (Yaw)
                 // Se aplica al CUERPO del jugador para que avance hacia donde mira
                 this.player.rotation.y -= e.movementX * this.sensitivity
@@ -30,8 +29,6 @@ export class CameraManager {
                 // Esto evita que el jugador dé la vuelta completa verticalmente
                 // 1.5 radianes son aproximadamente 85 grados
                 this.camera.rotation.x = Math.max(-1.5, Math.min(1.5, this.camera.rotation.x))
-
-
             }
         })
 

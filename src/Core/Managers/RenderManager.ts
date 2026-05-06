@@ -1,5 +1,5 @@
-import {  Scene, WebGLRenderer } from "three";
-import type { CameraManager } from "./CameraManager";
+import { Scene, WebGLRenderer } from 'three'
+import type { CameraManager } from './CameraManager'
 
 export class RenderManager extends WebGLRenderer {
     private cameraManager: CameraManager
@@ -22,7 +22,7 @@ export class RenderManager extends WebGLRenderer {
         this.onResize()
         // Luego un listener bien atento a los cambios
         window.addEventListener('resize', () => this.onResize())
-    
+
         // Capturar el ratón en pantalla al hacer click
         canvas.addEventListener('click', () => {
             canvas.requestPointerLock()
@@ -31,8 +31,8 @@ export class RenderManager extends WebGLRenderer {
 
     private onResize() {
         // Las necesito 2 veces :)
-        const w = window.innerWidth;
-        const h = window.innerHeight;
+        const w = window.innerWidth
+        const h = window.innerHeight
 
         // Actualizacion renderer
         this.setSize(w, h)

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { Vector3, Object3D, Scene } from 'three'
+import { Vector3, Object3D } from 'three'
 import { Dummy } from '../Dummy'
 import { FPSScene } from '../../../core/FPSScene'
 

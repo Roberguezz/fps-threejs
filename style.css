@@ -1,18 +1,18 @@
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  /* Evita que el scroll desplace el canvas */
-  background-color: red;
-  /* TEST: Si ves rojo, el canvas no está ocupando todo */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Evita que el scroll desplace el canvas */
+    background-color: red;
+    /* TEST: Si ves rojo, el canvas no está ocupando todo */
 }
 
 canvas {
-  display: block;
-  /* Quita espacios fantasma abajo */
-  width: 100vw;
-  height: 100vh;
+    display: block;
+    /* Quita espacios fantasma abajo */
+    width: 100vw;
+    height: 100vh;
 }

@@ -46,11 +46,11 @@ describe('Player', () => {
     })
 
     it('should emit PLAYER_SHOOT event when shoot is called', () => {
-        const emitSpy = vi.spyOn(eventBus, 'emit');
+        const emitSpy = vi.spyOn(eventBus, 'emit')
 
         // Llamar a shoot directamente
-        player['shoot']([]);
+        player['shoot']([])
 
-        expect(emitSpy).toHaveBeenCalledWith(GameEvents.PLAYER_SHOOT, expect.any(Object));
+        expect(emitSpy).toHaveBeenCalledWith(GameEvents.PLAYER_SHOOT, expect.any(Object))
     })
 })

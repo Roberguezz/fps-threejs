@@ -1,8 +1,17 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, Object3D, PerspectiveCamera, Raycaster, Vector3, Vector2 } from "three"
-import type { FPSScene } from "../../core/FPSScene"
-import type { InputManager } from "../../core/InputManager"
-import type { CameraManager } from "../../core/managers/CameraManager"
-import { eventBus, GameEvents } from "../../core/Events"
+import {
+    BoxGeometry,
+    Mesh,
+    MeshStandardMaterial,
+    Object3D,
+    PerspectiveCamera,
+    Raycaster,
+    Vector3,
+    Vector2
+} from 'three'
+import type { FPSScene } from '../../core/FPSScene'
+import type { InputManager } from '../../core/InputManager'
+import type { CameraManager } from '../../core/managers/CameraManager'
+import { eventBus, GameEvents } from '../../core/Events'
 
 export class Player extends Object3D {
     private speed: number = 10
@@ -49,8 +58,8 @@ export class Player extends Object3D {
         this.weapon.position.set(0.3, -0.3, -0.5)
 
         this.muzzlePoint = new Object3D()
-        this.muzzlePoint.position.set(0, 0, -0.25)  // Ajusta según el largo del modelo
-        this.weapon.add(this.muzzlePoint)           // Guárdalo como propiedad de la clase
+        this.muzzlePoint.position.set(0, 0, -0.25) // Ajusta según el largo del modelo
+        this.weapon.add(this.muzzlePoint) // Guárdalo como propiedad de la clase
 
         // --- CUERPO ---
         const pGeo = new BoxGeometry(1, 2, 1)
@@ -72,40 +81,38 @@ export class Player extends Object3D {
 
     private shoot(targets: Object3D[]) {
         // 1. Posición de la punta del arma (Muzzle)
-        const barrelPosition = this._v1;
-        this.muzzlePoint.getWorldPosition(barrelPosition);
+        const barrelPosition = this._v1
+        this.muzzlePoint.getWorldPosition(barrelPosition)
 
         // 2. ¿A qué estamos apuntando en el centro de la pantalla?
-        const targetPoint = this._v2;
+        const targetPoint = this._v2
 
         // Configuramos el rayo desde el centro de la cámara (0,0 es el centro en NDC)
-        this.shootRaycaster.setFromCamera(this.centerScreen, this.camera);
+        this.shootRaycaster.setFromCamera(this.centerScreen, this.camera)
 
         // Miramos si choca con algo de nuestra lista de objetivos
-        const intersects = this.shootRaycaster.intersectObjects(targets);
+        const intersects = this.shootRaycaster.intersectObjects(targets)
 
         if (intersects.length > 0) {
             // Si hay impacto, apuntamos a ese punto exacto
-            targetPoint.copy(intersects[0].point);
+            targetPoint.copy(intersects[0].point)
         } else {
             // Si no hay nada, proyectamos un punto a 500 metros en la dirección del rayo
-            this.shootRaycaster.ray.at(500, targetPoint);
+            this.shootRaycaster.ray.at(500, targetPoint)
         }
 
         // 3. Calculamos la dirección real: desde el cañón hacia el punto de impacto
-        const finalDirection = this._v3
-            .subVectors(targetPoint, barrelPosition)
-            .normalize();
+        const finalDirection = this._v3.subVectors(targetPoint, barrelPosition).normalize()
 
         // 4. Emitimos el evento de disparo
         eventBus.emit(GameEvents.PLAYER_SHOOT, {
             position: barrelPosition.clone(),
             direction: finalDirection.clone()
-        });
+        })
 
         // 5. Retroceso (Recoil)
-        this.weapon.position.z += 0.15;
-        this.weapon.rotation.x -= 0.2;
+        this.weapon.position.z += 0.15
+        this.weapon.rotation.x -= 0.2
     }
 
     public update(delta: number, input: InputManager) {

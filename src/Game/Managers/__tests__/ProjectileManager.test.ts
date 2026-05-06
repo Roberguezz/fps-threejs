@@ -19,7 +19,7 @@ describe('ProjectileManager', () => {
         eventBus.emit(GameEvents.PLAYER_SHOOT, {
             position: startPos,
             direction: dir
-        });
+        })
 
         expect(manager['projectiles'].length).toBe(1)
         expect(scene.children.length).toBe(1)
@@ -37,7 +37,7 @@ describe('ProjectileManager', () => {
     })
 
     it('should detect collision and emit ENEMY_HIT', () => {
-        const emitSpy = vi.spyOn(eventBus, 'emit');
+        const emitSpy = vi.spyOn(eventBus, 'emit')
         const target = new Mesh(new BoxGeometry(1, 1, 1), new MeshStandardMaterial())
         target.position.set(0, 0, -2)
         target.updateMatrixWorld()
@@ -46,10 +46,13 @@ describe('ProjectileManager', () => {
 
         manager.update(0.1, [target])
 
-        expect(emitSpy).toHaveBeenCalledWith(GameEvents.ENEMY_HIT, expect.objectContaining({
-            target: target,
-            damage: 10
-        }))
+        expect(emitSpy).toHaveBeenCalledWith(
+            GameEvents.ENEMY_HIT,
+            expect.objectContaining({
+                target: target,
+                damage: 10
+            })
+        )
         expect(manager['projectiles'].length).toBe(0)
     })
 })
